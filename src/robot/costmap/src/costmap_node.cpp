@@ -27,7 +27,7 @@ void CostmapNode::laser_callback(const sensor_msgs::msg::LaserScan::SharedPtr ms
   }
 
   this->inflateObstacles();
-  this->publishCostmap();
+  this->publishCostmap(msg);
 }
 
 void CostmapNode::initializeCostmap() {
@@ -44,11 +44,13 @@ void CostmapNode::inflateObstacles() {
   this->costmap_.inflateObstacles();
 }
 
-void CostmapNode::publishCostmap() {
+void CostmapNode::publishCostmap(const sensor_msgs::msg::LaserScan::SharedPtr scan) {
   std::vector<int8_t> costmap_data = this->costmap_.getCostmap();
   nav_msgs::msg::OccupancyGrid costmap_msg;
-  costmap_msg.header.stamp = this->now();
-  costmap_msg.header.frame_id = "map";
+
+  // Fill in header info using lidar message
+  costmap_msg.header.stamp = scan->header.stamp;
+  costmap_msg.header.frame_id = scan->header.frame_id;
   costmap_msg.info.resolution = this->costmap_.resolution_;
   costmap_msg.info.width = this->costmap_.width;
   costmap_msg.info.height = this->costmap_.height;

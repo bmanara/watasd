@@ -23,7 +23,7 @@ class CostmapNode : public rclcpp::Node {
     void initializeCostmap();
     void markObstacle(double range, double angle);
     void inflateObstacles();
-    void publishCostmap();
+    void publishCostmap(const sensor_msgs::msg::LaserScan::SharedPtr scan);
 };
 
 #endif 
