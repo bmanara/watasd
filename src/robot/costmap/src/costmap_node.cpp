@@ -31,6 +31,7 @@ void CostmapNode::laser_callback(const sensor_msgs::msg::LaserScan::SharedPtr ms
 }
 
 void CostmapNode::initializeCostmap() {
+  std::cout << "Resetting costmap..." << std::endl;
   this->costmap_.reset();
 }
 

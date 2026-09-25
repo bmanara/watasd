@@ -19,7 +19,7 @@ CostmapCore::CostmapCore(const rclcpp::Logger& logger) : logger_(logger) {
 }
 
 void CostmapCore::reset() {
-    costmap_.resize(width * height, 0); // Initialize all cells to free space (0)
+    costmap_.assign(width * height, 0); // Set all cells to free space (0)
 }
 
 void CostmapCore::convertToGrid(double range, double angle, int& x_grid, int& y_grid) {
