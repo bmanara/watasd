@@ -12,7 +12,7 @@ CostmapCore::CostmapCore(const rclcpp::Logger& logger) : logger_(logger) {
     origin_x_ = -20.0; // origin of the costmap in world coordinates
     origin_y_ = -20.0; // origin of the costmap in world coordinates
 
-    inflation_radius = 1.0; // radius for obstacle inflation in meters
+    inflation_radius = 2.0; // radius for obstacle inflation in meters
     max_inflation_cost = 100; // maximum cost for inflated obstacles
 
     this->reset();
