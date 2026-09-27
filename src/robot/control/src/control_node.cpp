@@ -15,6 +15,9 @@ ControlNode::ControlNode(): Node("control"), control_(robot::ControlCore(this->g
     std::chrono::milliseconds(100), std::bind(&ControlNode::controlLoop, this)
   );
 
+  lookahead_distance_ = 1.0; // meters
+  goal_tolerance_ = 0.1; // meters
+  linear_speed_ = 0.5; // meters per second
 }
 
 void ControlNode::pathCallback(const nav_msgs::msg::Path::SharedPtr msg) {
@@ -33,6 +36,14 @@ void ControlNode::controlLoop() {
 
   if (current_odom_.header.stamp.sec == 0 && current_odom_.header.stamp.nanosec == 0) {
     RCLCPP_WARN(this->get_logger(), "No odometry received yet.");
+    return;
+  }
+
+  if (computeDistance(current_odom_.pose.pose.position, current_path_.poses.back().pose.position) < goal_tolerance_) {
+    RCLCPP_INFO(this->get_logger(), "Goal reached.");
+    current_path_.poses.clear(); // Clear the path to stop further movement
+    geometry_msgs::msg::Twist stop_cmd;
+    cmd_vel_pub_->publish(stop_cmd);
     return;
   }
 
